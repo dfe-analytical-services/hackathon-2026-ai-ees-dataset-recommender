@@ -72,7 +72,7 @@ publication_type <- ellmer::type_object(
 user_question <- "What dataset has data on NEET people"
 
 # LLM call and output
-result <- chat$chat_structured(
+publication_step_result <- chat$chat_structured(
   paste0(
     "User request:\n",
     user_question,
@@ -84,18 +84,18 @@ result <- chat$chat_structured(
 
 # Output
 # Publication ID
-result$publication_id
+publication_step_result$publication_id
 
 # Publication title
 eesyapi::get_publications() |>
-  dplyr::filter(id == result$publication_id) |>
+  dplyr::filter(id == publication_step_result$publication_id) |>
   dplyr::select(title)
 
 # LLM reasoning
-result$reasoning
+publication_step_result$reasoning
 
 # LLM confidence
-result$confidence
+publication_step_result$confidence
 
 
 ################################################################################
@@ -107,37 +107,14 @@ result$confidence
 # ------------------------------------------------------------------------------
 # Get the datasets within the identified publication
 publication_datasets <- eesyapi::get_data_catalogue(
-  publication_id = result$publication_id
-)
-
-# Function to build the dataset search LLM query
-# Retrieve datasets within a publication
-get_publication_datasets <- function(publication_id) {
-  eesyapi::get_data_catalogue(
-    publication_id = publication_id
-  ) |>
-    dplyr::select(-latestVersion)
-}
-
-# Make the function available to the LLM
-get_publication_datasets_tool <- ellmer::tool(
-  get_publication_datasets,
-  name = "get_publication_datasets",
-  description = "
-Retrieve the datasets available within a selected Explore Education
-Statistics publication.
-
-Use this after identifying the relevant publication. The returned
-dataset catalogue should be inspected to determine which dataset
-best matches the user's request.
-",
-  arguments = list(
-    publication_id = ellmer::type_string(
-      description = "The ID of the selected publication."
-    )
+  publication_id = publication_step_result$publication_id
+) |>
+  dplyr::select(-latestVersion) |>
+  jsonlite::toJSON(
+    dataframe = "rows",
+    auto_unbox = TRUE,
+    na = "null"
   )
-)
-chat$register_tool(get_publication_datasets_tool)
 
 # Define structured dataset output
 dataset_type <- ellmer::type_object(
@@ -155,26 +132,26 @@ dataset_type <- ellmer::type_object(
   )
 )
 
-# Ask LLM to find the relevant dataset
-response <- chat$chat(
+# Extract decision as structured data
+dataset_step_result <- chat$chat_structured(
   paste0(
-    "The relevant publication has been identified as: ",
+    "User request:\n",
+    user_question,
+    "\n\n",
+    "The relevant publication has already been identified.\n",
+    "Publication ID: ",
     result$publication_id,
     "\n\n",
-    "Now find the most relevant dataset for this user request:\n",
-    user_question
-  )
-)
-
-# Extract the final decision as structured data
-dataset_result <- chat$chat_structured(
-  "Based on the dataset catalogue you just retrieved, identify the single ",
-  "most relevant dataset for the user's request.",
+    "Available datasets within this publication:\n",
+    datasets,
+    "\n\n",
+    "Select the single dataset that is most relevant to the user's request."
+  ),
   type = dataset_type
 )
 
 # Outputs
-dataset_result$dataset_id
-dataset_result$dataset_title
-dataset_result$reasoning
-dataset_result$confidence
+dataset_step_result$dataset_id
+dataset_step_result$dataset_title
+dataset_step_result$reasoning
+dataset_step_result$confidence
