@@ -8,6 +8,12 @@ library(jsonlite)
 library(odbc)
 library(DBI)
 
+# Define the models to use, in order of preference. If the first doesn't work, the code shuld switch to the next one.
+llm_models <- c("databricks-claude-sonnet-4-6"   # Strong reasoning and comparison of multiple inputs, best overall quality/cost balance
+,"databricks-claude-opus-4-7"    # Strongest reasoning for filter inference, but significantly higher cost
+,"databricks-gpt-oss-120b"       # Strong reasoning and structured extraction, potentially lower cost than Claude
+,"databricks-qwen35-122b-a10b"   # Good extraction and classification capability, likely cheaper than Claude
+,"databricks-claude-sonnet-4-5") # Slightly older Sonnet model, lower quality than 4.6 but still a strong option
 
 # Find the dataset ids and metadata col ids
 publications <- eesyapi::get_publications() %>%
@@ -39,16 +45,18 @@ dataset_id <- "0e2f9901-af3b-9f77-9e7d-3a93fd7c015e"
 metadata <- eesyapi::get_meta(dataset_id)
 
 # Define the system prompt
-system_prompt <- cat(paste0("
+system_request <- paste0("
 You are an expert at using the Explore Education Statistics API. You need to pick the publication most relevant to the user's data request. Here are the publications:
 ", publications, "
 
 You should return only the id of the most relevant publication. This should be a JSON. Do not add any description.
-"))
+")
 
+# Define the user prompt
+user_request <- "What dataset has data on NEET people"
 
-
-call_llm_with_fallback <- function(user_input, system_prompt, model_list) {
+# Function to connect to DAtabricks LLM using the API, send the request, and store the response.
+call_llm_with_fallback <- function(user_input = user_request, system_prompt = system_request, model_list = llm_models) {
   last_error <- NULL
   for (model in model_list) {
     
@@ -101,10 +109,6 @@ call_llm_with_fallback <- function(user_input, system_prompt, model_list) {
   stop(sprintf("All models failed. Last error: %s", last_error$message))
 }
 
-
-call_databricks_llm <- function(user_input) {
-  
-  system_prompt <- paste(build_prompt(schema, config))
-  
-  call_llm_with_fallback(user_input = user_input, system_prompt = system_prompt, model_list = create_json_llm_models)
-}
+result <- call_llm_with_fallback()
+content <- httr::content(result$response, as = "parsed", simplifyVector = TRUE)
+text <- content$choices$message$content
