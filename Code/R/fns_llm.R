@@ -45,7 +45,10 @@ select_publication <- function(user_question, publications, chat) {
     ),
     confidence = ellmer::type_number(
       description = paste(
-        "Confidence in the publication selection, from 0 to 1."
+        "Confidence in the publication selection, from 0 to 1. 
+        0 means the dataset does not exist.
+        1 means you are certain this is the correct data set.
+        0.5 means you were 50/50 between multiple datasets."
       )
     )
   )
@@ -98,7 +101,10 @@ select_dataset <- function(
     ),
     confidence = ellmer::type_number(
       description = paste(
-        "Confidence in the dataset selection, from 0 to 1."
+        "Confidence in the dataset selection, from 0 to 1. 
+        0 means the dataset does not exist.
+        1 means you are certain this is the correct data set.
+        0.5 means you were 50/50 between multiple datasets."
       )
     )
   )
