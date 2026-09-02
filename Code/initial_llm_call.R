@@ -1,0 +1,110 @@
+# install.packages("devtools")
+library(devtools)
+# Install eesyapi package from github
+# devtools::install_github("dfe-analytical-services/eesyapi.R")
+library(dplyr)
+library(eesyapi)
+library(jsonlite)
+library(odbc)
+library(DBI)
+
+
+# Find the dataset ids and metadata col ids
+publications <- eesyapi::get_publications() %>%
+  select(-c(lastPublished, slug)) %>%
+  jsonlite::toJSON(
+    dataframe = "rows",
+    pretty = TRUE,
+    auto_unbox = TRUE,
+    na = "null"
+    )
+
+# Returned by the first LLM call
+publication_id <- "8b7474f9-5870-4ecc-7557-08da5f64dcf1"
+
+# Get the datasets based on the publication id
+dataset_for_query <- eesyapi::get_data_catalogue(publication_id) %>%
+  select(c(id, title, summary)) %>%
+  jsonlite::toJSON(
+    dataframe = "rows",
+    pretty = TRUE,
+    auto_unbox = TRUE,
+    na = "null"
+  )
+
+# Returned by the second LLM call
+dataset_id <- "0e2f9901-af3b-9f77-9e7d-3a93fd7c015e"
+
+# Get the metadata for the dataset
+metadata <- eesyapi::get_meta(dataset_id)
+
+# Define the system prompt
+system_prompt <- cat(paste0("
+You are an expert at using the Explore Education Statistics API. You need to pick the publication most relevant to the user's data request. Here are the publications:
+", publications, "
+
+You should return only the id of the most relevant publication. This should be a JSON. Do not add any description.
+"))
+
+
+
+call_llm_with_fallback <- function(user_input, system_prompt, model_list) {
+  last_error <- NULL
+  for (model in model_list) {
+    
+    message(sprintf("Trying model: %s", model ))
+    
+    url <- paste0(Sys.getenv("DATABRICKS_HOST"),  "/serving-endpoints/", model, "/invocations")
+    
+    # Build request body for chat completion API
+    if (grepl("claude-opus", model)) {
+      body <- list(messages = list(list(role = "system", content = system_prompt)
+                                   ,list(role = "user", content = user_input)))  
+    } else {
+      body <- list(messages = list(list(role = "system", content = system_prompt)
+                                   ,list(role = "user", content = user_input))
+                   ,temperature = 0) # deterministic output (no randomness)
+    }
+    
+    # Try model
+    result <- tryCatch({
+      response <- httr::POST(url
+                             ,httr::add_headers(Authorization = paste("Bearer", Sys.getenv("DATABRICKS_TOKEN")))
+                             ,encode = "json"
+                             ,body = body)
+      
+      if (httr::status_code(response) >= 300) {
+        stop(
+          httr::content(response, as = "text",  encoding = "UTF-8"))
+      }
+      
+      list(response = response, system_prompt = system_prompt, model_used = model)
+      
+    }, error = function(e) {
+      
+      message(sprintf("Model failed: %s", model))
+      
+      message(e$message)
+      
+      last_error <<- e
+      
+      NULL
+      
+    })
+    
+    if (!is.null(result)) {
+      return(result)
+    }
+    
+  }
+  
+  stop(sprintf("All models failed. Last error: %s", last_error$message))
+}
+
+
+call_databricks_llm <- function(user_input) {
+  
+  system_prompt <- paste(build_prompt(schema, config))
+  
+  call_llm_with_fallback(user_input = user_input, system_prompt = system_prompt, model_list = create_json_llm_models)
+}
