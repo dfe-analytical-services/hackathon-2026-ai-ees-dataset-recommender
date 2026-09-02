@@ -22,6 +22,7 @@ eesyapi::get_publications()$summary
 ################################################################################
 # Step 1: Identify the most relevant publication(s?)
 ################################################################################
+
 # ------------------------------------------------------------------------------
 # Setup
 # ------------------------------------------------------------------------------
@@ -101,4 +102,79 @@ result$confidence
 # Step 2: From the publication, identify the most relevant dataset(s?)
 ################################################################################
 
-eesyapi::get_data_catalogue(publication_id = result$publication_id)$title
+# ------------------------------------------------------------------------------
+# Setup
+# ------------------------------------------------------------------------------
+# Get the datasets within the identified publication
+publication_datasets <- eesyapi::get_data_catalogue(
+  publication_id = result$publication_id
+)
+
+# Function to build the dataset search LLM query
+# Retrieve datasets within a publication
+get_publication_datasets <- function(publication_id) {
+  eesyapi::get_data_catalogue(
+    publication_id = publication_id
+  ) |>
+    dplyr::select(-latestVersion)
+}
+
+# Make the function available to the LLM
+get_publication_datasets_tool <- ellmer::tool(
+  get_publication_datasets,
+  name = "get_publication_datasets",
+  description = "
+Retrieve the datasets available within a selected Explore Education
+Statistics publication.
+
+Use this after identifying the relevant publication. The returned
+dataset catalogue should be inspected to determine which dataset
+best matches the user's request.
+",
+  arguments = list(
+    publication_id = ellmer::type_string(
+      description = "The ID of the selected publication."
+    )
+  )
+)
+chat$register_tool(get_publication_datasets_tool)
+
+# Define structured dataset output
+dataset_type <- ellmer::type_object(
+  dataset_id = ellmer::type_string(
+    description = "The ID of the most relevant dataset."
+  ),
+  dataset_title = ellmer::type_string(
+    description = "The title of the most relevant dataset."
+  ),
+  reasoning = ellmer::type_string(
+    description = "Brief explanation of why this dataset is the best match."
+  ),
+  confidence = ellmer::type_number(
+    description = "Confidence in the selection, from 0 to 1."
+  )
+)
+
+# Ask LLM to find the relevant dataset
+response <- chat$chat(
+  paste0(
+    "The relevant publication has been identified as: ",
+    result$publication_id,
+    "\n\n",
+    "Now find the most relevant dataset for this user request:\n",
+    user_question
+  )
+)
+
+# Extract the final decision as structured data
+dataset_result <- chat$chat_structured(
+  "Based on the dataset catalogue you just retrieved, identify the single ",
+  "most relevant dataset for the user's request.",
+  type = dataset_type
+)
+
+# Outputs
+dataset_result$dataset_id
+dataset_result$dataset_title
+dataset_result$reasoning
+dataset_result$confidence
