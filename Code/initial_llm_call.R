@@ -112,3 +112,7 @@ call_llm_with_fallback <- function(user_input = user_request, system_prompt = sy
 result <- call_llm_with_fallback()
 content <- httr::content(result$response, as = "parsed", simplifyVector = TRUE)
 text <- content$choices$message$content
+returned_publication_id <- fromJSON(text)$id
+
+test <- eesyapi::get_publications() %>%
+  filter(id == returned_publication_id)
