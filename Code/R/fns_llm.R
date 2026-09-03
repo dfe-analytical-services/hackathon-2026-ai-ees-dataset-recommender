@@ -222,7 +222,7 @@ select_dataset <- function(
   # Keep only datasets with confidence > 0.8
   result$datasets <- subset(
     result$datasets,
-    confidence > 0
+    confidence >= 0.7
   )
   
   # Defensive cap in case the model returns more than requested

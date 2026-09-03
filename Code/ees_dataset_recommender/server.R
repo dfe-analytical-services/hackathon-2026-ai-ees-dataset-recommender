@@ -97,14 +97,50 @@ server <- function(input, output, session) {
     ########################################################
 
     if (stage() == "done") {
+      
       result <- query_result()
       
-      datasets <- result$dataset$datasets
-      dataset_links <- result$dataset_links
+      # No publication identified
+      if (
+        is.null(result$publication$publication_title) ||
+        identical(result$publication$publication_title, "") ||
+        is.na(result$publication$publication_title)
+      ) {
+        
+        return(
+          tagList(
+            
+            h2("No relevant publication found"),
+            
+            tags$p(
+              "A suitable publication could not be identified from the request."
+            ),
+            
+            tags$p(
+              tags$strong("Reasoning:")
+            ),
+            
+            tags$p(
+              result$publication$reasoning
+            ),
+            
+            br(),
+            
+            actionButton(
+              inputId = "start_again",
+              label = "Ask another question",
+              class = "govuk-button govuk-button--secondary"
+            )
+          )
+        )
+      }
       
+      datasets <- result$recommended_datasets
+      
+      # Publication found but no datasets passed confidence threshold
       if (
         is.null(datasets) ||
-        nrow(datasets) == 0
+        length(datasets) == 0
       ) {
         
         return(
@@ -114,7 +150,7 @@ server <- function(input, output, session) {
             
             tags$p(
               "A relevant publication was identified, but no dataset met ",
-              "the minimum confidence threshold of 0.8."
+              "the minimum confidence threshold of 0.7."
             ),
             
             tags$hr(),
@@ -150,11 +186,9 @@ server <- function(input, output, session) {
         )
       }
       
-      dataset_cards <- lapply(seq_len(nrow(datasets)), function(i) {
+      dataset_cards <- lapply(seq_along(datasets), function(i) {
         
-        ds <- datasets[i, ]
-        
-        dataset_link <- dataset_links[[i]]
+        ds <- datasets[[i]]
         
         ranking_label <- switch(
           as.character(i),
@@ -185,13 +219,13 @@ server <- function(input, output, session) {
             
             h3(ranking_label),
             
-            h4(as.character(ds$dataset_title)),
+            h4(ds$dataset_title),
             
             tags$p(
               tags$strong("Link to dataset: "),
               shiny::a(
-                href = dataset_link,
-                dataset_link,
+                href = ds$dataset_url,
+                ds$dataset_url,
                 target = "_blank"
               )
             ),
@@ -206,7 +240,7 @@ server <- function(input, output, session) {
             ),
             
             tags$p(
-              as.character(ds$reasoning)
+              ds$reasoning
             )
           )
         )
@@ -223,7 +257,7 @@ server <- function(input, output, session) {
             tags$strong("The first dataset is the recommended dataset"),
             ", with subsequent datasets provided as alternatives."
           ),
-
+          
           tags$p(
             tags$strong("Publication name: "),
             result$publication$publication_title
@@ -232,25 +266,27 @@ server <- function(input, output, session) {
           dataset_cards,
           
           h2("Selected publication"),
-
+          
           tags$p(
             tags$strong("Title: "),
             result$publication$publication_title
           ),
-
+          
           tags$p(
             tags$strong("Confidence: "),
             round(result$publication$confidence, 2)
           ),
-
+          
           tags$p(
             tags$strong("Reasoning:")
           ),
-
-          tags$p(result$publication$reasoning),
-
+          
+          tags$p(
+            result$publication$reasoning
+          ),
+          
           br(),
-
+          
           actionButton(
             inputId = "start_again",
             label = "Ask another question",
