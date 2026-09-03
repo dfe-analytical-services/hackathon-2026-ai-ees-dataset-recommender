@@ -65,11 +65,17 @@ run_ees_workflow <- function(user_question) {
     publication = publication_result,
     chat = chat
   )
-
+  
+  # Step 3: Get dataset URL
+  dataset_url <- get_dataset_url(
+    dataset_id = as.character(unlist(dataset_result$dataset_id))
+  )
+  
   # Return results
   list(
     user_question = user_question,
     publication = publication_result,
-    dataset = dataset_result
+    dataset = dataset_result,
+    dataset_link = dataset_url
   )
 }
