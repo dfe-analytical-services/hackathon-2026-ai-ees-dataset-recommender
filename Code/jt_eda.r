@@ -27,8 +27,8 @@ eesyapi::get_publications()$summary
 # Setup
 # ------------------------------------------------------------------------------
 # Get EES publication data and convert to JSON for LLM
-ees_publications <- eesyapi::get_publications() %>%
-  select(-c(lastPublished, slug)) %>%
+ees_publications <- eesyapi::get_publications() |>
+  dplyr::select(-c(lastPublished, slug)) |>
   jsonlite::toJSON(
     dataframe = "rows",
     pretty = TRUE,
@@ -55,24 +55,59 @@ chat <- ellmer::chat_databricks(
   When selecting between multiple options, consider the user's
   actual data requirement rather than relying solely on matching
   keywords.
+
+  When no supplied metadata provides a sufficiently relevant match,
+  do not force a selection. Prefer returning no match over making
+  a weak or speculative recommendation.
+
+  An incorrect recommendation is worse than returning no
+  recommendation.
+
+  When no suitable match exists, clearly explain why and identify
+  reasonable alternatives where available.
   "
 )
 
 # Define LLM output layout
 publication_type <- ellmer::type_object(
   publication_id = ellmer::type_string(
-    description = "The ID of the most relevant publication."
+    description = paste(
+      "The ID of the single most relevant publication.",
+      "Return null if no publication is sufficiently relevant.",
+      "The ID must exactly match an ID in the supplied metadata."
+    ),
+    required = FALSE
   ),
   publication_title = ellmer::type_string(
     description = paste(
-      "The title of the most relevant publication."
-    )
+      "The title of the most relevant publication.",
+      "Return null if no publication is sufficiently relevant."
+    ),
+    required = FALSE
   ),
   reasoning = ellmer::type_string(
-    description = "Brief explanation of why this publication is the best match."
+    description = paste(
+      "Explain the publication selection.",
+      "If a suitable publication exists, explain why it matches",
+      "the user's request.",
+      "If no suitable publication exists, explain why no",
+      "recommendation was made and mention potentially relevant",
+      "alternatives."
+    )
   ),
   confidence = ellmer::type_number(
-    description = "Confidence in the selection, from 0 to 1."
+    description = paste(
+      "Confidence in the publication selection, from 0 to 1.",
+      "Use a low value when there is no suitable match."
+    )
+  ),
+  alternatives = ellmer::type_array(
+    ellmer::type_string(),
+    description = paste(
+      "IDs of potentially relevant or similar alternative real publications.",
+      "A bit like a 'Did you mean...?'"
+    ),
+    required = FALSE
   )
 )
 
@@ -81,7 +116,7 @@ publication_type <- ellmer::type_object(
 # Test LLM output
 # ------------------------------------------------------------------------------
 # User question
-user_question <- "What dataset has data on NEET people"
+user_question <- "Motorways in Europe"
 
 # LLM call and output
 publication_step_result <- chat$chat_structured(
@@ -98,12 +133,19 @@ publication_step_result <- chat$chat_structured(
     "\n\n",
 
     "Selection guidance:\n",
-    "- Choose the publication whose subject matter and coverage ",
-    "best match the user's request.\n",
+    "- Choose a publication only if it is genuinely relevant to ",
+    "the user's request.\n",
+    "- Do not select a publication simply because it is the closest ",
+    "available option.\n",
     "- Consider the meaning of the request, not just keyword matches.\n",
     "- Prefer a publication that is likely to contain the data needed ",
     "to answer the request.\n",
-    "- Select only an ID that appears in the supplied publication metadata."
+    "- If no publication is sufficiently relevant, return null for ",
+    "publication_id and publication_title.\n",
+    "- If there is no suitable publication, explain why and provide ",
+    "potentially relevant alternatives.\n",
+    "- Select only IDs that appear in the supplied metadata.\n",
+    "- An incorrect recommendation is worse than returning no match."
   ),
   type = publication_type
 )
@@ -123,6 +165,8 @@ publication_step_result$reasoning
 # LLM confidence
 publication_step_result$confidence
 
+# Suggested alternatives
+publication_step_result$alternatives
 
 ################################################################################
 # Step 2: From the publication, identify the most relevant dataset(s?)

@@ -26,8 +26,14 @@ get_publication_datasets_json <- function(publication_id) {
 
 # Get the dataset URL
 get_dataset_url <- function(dataset_id) {
-  response <- httr::GET(paste0("https://api.education.gov.uk/statistics/v1/data-sets/", dataset_id))
+  response <- httr::GET(paste0(
+    "https://api.education.gov.uk/statistics/v1/data-sets/",
+    dataset_id
+  ))
   response_data <- httr::content(response, "parsed")
   file_id <- response_data$latestVersion$file$id
-  paste0("https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/", file_id)
+  paste0(
+    "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/",
+    file_id
+  )
 }

@@ -18,6 +18,16 @@ setup_llm_chat <- function() {
   When selecting between multiple options, consider the user's
   actual data requirement rather than relying solely on matching
   keywords.
+
+  When no supplied metadata provides a sufficiently relevant match,
+  do not force a selection. Prefer returning no match over making
+  a weak or speculative recommendation.
+
+  An incorrect recommendation is worse than returning no
+  recommendation.
+
+  When no suitable match exists, clearly explain why and identify
+  reasonable alternatives where available.
   "
   )
 }
@@ -29,27 +39,43 @@ select_publication <- function(user_question, publications, chat) {
     publication_id = ellmer::type_string(
       description = paste(
         "The ID of the single most relevant publication.",
-        "This must exactly match an ID in the supplied metadata."
-      )
+        "Return null if no publication is sufficiently relevant.",
+        "The ID must exactly match an ID in the supplied metadata."
+      ),
+      required = FALSE
     ),
     publication_title = ellmer::type_string(
       description = paste(
-        "The title of the most relevant publication."
-      )
+        "The title of the most relevant publication.",
+        "Return null if no publication is sufficiently relevant."
+      ),
+      required = FALSE
     ),
     reasoning = ellmer::type_string(
       description = paste(
-        "Brief explanation of why this publication is the best",
-        "match for the user's data request."
+        "Explain the publication selection.",
+        "If a suitable publication exists, explain why it matches",
+        "the user's request.",
+        "If no suitable publication exists, explain why no",
+        "recommendation was made and mention potentially relevant",
+        "alternatives."
       )
     ),
     confidence = ellmer::type_number(
       description = paste(
-        "Confidence in the publication selection, from 0 to 1. 
-        0 means the dataset does not exist.
-        1 means you are certain this is the correct data set.
-        0.5 means you were 50/50 between multiple datasets."
+        "Confidence in the publication selection, from 0 to 1.",
+        "0 means the dataset does not exist.",
+        "1 means you are certain this is the correct data set.",
+        "0.5 means you were 50/50 between multiple datasets."
       )
+    ),
+    alternatives = ellmer::type_array(
+      ellmer::type_string(),
+      description = paste(
+        "IDs of potentially relevant or similar alternative real publications.",
+        "This could be where a user has made a typo. A bit like a 'Did you mean...?'"
+      ),
+      required = FALSE
     )
   )
 
@@ -57,16 +83,29 @@ select_publication <- function(user_question, publications, chat) {
     paste0(
       "Task: Identify the single publication that is most relevant ",
       "to the user's data request.\n\n",
+
       "User request:\n",
       user_question,
       "\n\n",
+
       "Available publications:\n",
       publications,
       "\n\n",
+
       "Selection guidance:\n",
+      "- Choose a publication only if it is genuinely relevant to ",
+      "the user's request.\n",
+      "- Do not select a publication simply because it is the closest ",
+      "available option.\n",
       "- Consider the meaning of the request, not just keyword matches.\n",
-      "- Choose the publication most likely to contain the required data.\n",
-      "- Select only an ID present in the supplied metadata."
+      "- Prefer a publication that is likely to contain the data needed ",
+      "to answer the request.\n",
+      "- If no publication is sufficiently relevant, return null for ",
+      "publication_id and publication_title.\n",
+      "- If there is no suitable publication, explain why and provide ",
+      "potentially relevant alternatives.\n",
+      "- Select only IDs that appear in the supplied metadata.\n",
+      "- An incorrect recommendation is worse than returning no match."
     ),
     type = publication_type
   )
@@ -79,12 +118,42 @@ select_dataset <- function(
     publication,
     chat
 ) {
-  
+  # If no publication then skip
+  if (is.null(publication$publication_id)) {
+    return(NULL)
+  }
+
   dataset_catalogue <- get_publication_datasets_json(
     publication$publication_id
   )
   
   dataset_item_type <- ellmer::type_object(
+    dataset_id = ellmer::type_string(
+      description = paste(
+        "The ID of the dataset.",
+        "This must exactly match an ID in the supplied dataset catalogue."
+      )
+    ),
+    dataset_title = ellmer::type_string(
+      description = "The title of the dataset."
+    ),
+    reasoning = ellmer::type_string(
+      description = paste(
+        "Brief explanation of why this dataset is relevant",
+        "to the user's request."
+      )
+    ),
+    confidence = ellmer::type_number(
+      description = paste(
+        "Confidence in this dataset selection, from 0 to 1.",
+        "0 means the dataset does not exist.",
+        "1 means you are certain this is the correct dataset.",
+        "0.5 means you were 50/50 between multiple datasets."
+      )
+    )
+  )
+
+  dataset_type <- ellmer::type_object(
     dataset_id = ellmer::type_string(
       description = paste(
         "The ID of the dataset.",

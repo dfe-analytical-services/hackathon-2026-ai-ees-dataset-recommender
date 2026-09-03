@@ -3,110 +3,100 @@
 ############################################################
 
 server <- function(input, output, session) {
-  
   ##########################################################
   # APP STATE
   ##########################################################
-  
+
   stage <- reactiveVal("idle")
-  
+
   ##########################################################
   # RUN QUERY
   ##########################################################
-  
+
   query_result <- eventReactive(input$submit_question, {
-    
     req(input$user_question)
     req(nchar(trimws(input$user_question)) > 0)
-    
+
     run_ees_workflow(input$user_question)
-    
   })
-  
+
   ##########################################################
   # SUBMIT BUTTON
   ##########################################################
-  
+
   observeEvent(input$submit_question, {
     stage("loading")
   })
-  
+
   ##########################################################
   # MOVE TO DONE ONCE RESULT EXISTS
   ##########################################################
-  
+
   observeEvent(query_result(), {
     stage("done")
   })
-  
+
   ##########################################################
   # RESET BUTTON
   ##########################################################
-  
+
   observeEvent(input$start_again, {
-    
     updateTextAreaInput(
       session = session,
       inputId = "user_question",
       value = ""
     )
-    
+
     stage("idle")
   })
-  
+
   ##########################################################
   # RESULTS UI
   ##########################################################
-  
+
   output$results_ui <- renderUI({
-    
     ########################################################
     # IDLE
     ########################################################
-    
+
     if (stage() == "idle") {
-      
       return(
         tagList(
-          
           h3("How it works"),
-          
+
           tags$ol(
             tags$li("Enter a question about education statistics."),
-            tags$li("The Databricks LLM will identify the most relevant publication."),
+            tags$li(
+              "The Databricks LLM will identify the most relevant publication."
+            ),
             tags$li("The EES datasets for that publication will be evaluated."),
             tags$li("The most relevant dataset will be returned.")
           )
-          
         )
       )
     }
-    
+
     ########################################################
     # LOADING
     ########################################################
-    
+
     if (stage() == "loading") {
-      
       return(
         tagList(
-          
           h3("Searching..."),
-          
+
           tags$p(
             "Please wait while we find the most relevant dataset."
           )
-          
         )
       )
     }
-    
+
     ########################################################
     # DONE
     ########################################################
-    
+
     if (stage() == "done") {
-      
       result <- query_result()
       
       datasets <- result$dataset$datasets
@@ -233,7 +223,7 @@ server <- function(input, output, session) {
             tags$strong("The first dataset is the recommended dataset"),
             ", with subsequent datasets provided as alternatives."
           ),
-          
+
           tags$p(
             tags$strong("Publication name: "),
             result$publication$publication_title
@@ -242,63 +232,55 @@ server <- function(input, output, session) {
           dataset_cards,
           
           h2("Selected publication"),
-          
+
           tags$p(
             tags$strong("Title: "),
             result$publication$publication_title
           ),
-          
+
           tags$p(
             tags$strong("Confidence: "),
             round(result$publication$confidence, 2)
           ),
-          
+
           tags$p(
             tags$strong("Reasoning:")
           ),
-          
-          tags$p(
-            result$publication$reasoning
-          ),
-          
+
+          tags$p(result$publication$reasoning),
+
           br(),
-          
+
           actionButton(
             inputId = "start_again",
             label = "Ask another question",
             class = "govuk-button govuk-button--secondary"
           )
-          
         )
       )
     }
-    
+
     NULL
-    
   })
-  
+
   ##########################################################
   # OPTIONAL ERROR HANDLING
   ##########################################################
-  
+
   observeEvent(input$submit_question, {
-    
-    tryCatch({
-      
-      query_result()
-      
-    }, error = function(e) {
-      
-      stage("idle")
-      
-      showNotification(
-        paste("Error:", e$message),
-        type = "error",
-        duration = 10
-      )
-      
-    })
-    
+    tryCatch(
+      {
+        query_result()
+      },
+      error = function(e) {
+        stage("idle")
+
+        showNotification(
+          paste("Error:", e$message),
+          type = "error",
+          duration = 10
+        )
+      }
+    )
   })
-  
 }
