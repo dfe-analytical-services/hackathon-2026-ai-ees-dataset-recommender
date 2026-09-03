@@ -1,3 +1,9 @@
+# Etsimate token size of a prompt
+estimate_tokens <- function(x) {
+  ceiling(nchar(x) / 4)
+}
+
+
 # Setup databricks chat with system prompt for EES dataset
 setup_llm_chat <- function() {
   ellmer::chat_databricks(
