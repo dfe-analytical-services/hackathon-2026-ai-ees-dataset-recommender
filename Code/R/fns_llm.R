@@ -73,7 +73,7 @@ select_publication <- function(user_question, publications, chat) {
       ellmer::type_string(),
       description = paste(
         "IDs of potentially relevant or similar alternative real publications.",
-        "A bit like a 'Did you mean...?'"
+        "This could be where a user has made a typo. A bit like a 'Did you mean...?'"
       ),
       required = FALSE
     )

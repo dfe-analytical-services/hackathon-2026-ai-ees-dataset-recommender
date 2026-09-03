@@ -22,7 +22,8 @@
 #' \describe{
 #'   \item{user_question}{The original user question.}
 #'   \item{publication}{A structured result containing the selected
-#'     publication ID, title, reasoning, and confidence.}
+#'     publication ID, title, reasoning, confidence and alternative
+#'     publications if thr user query leads to none identified.}
 #'   \item{dataset}{A structured result containing the selected dataset
 #'     ID, title, reasoning, and confidence.}
 #' }
@@ -37,6 +38,7 @@
 #' result$publication$publication_title
 #' result$publication$reasoning
 #' result$publication$confidence
+#' result$publication$alternatives
 #'
 #' result$dataset$dataset_id
 #' result$dataset$dataset_title
@@ -65,12 +67,12 @@ run_ees_workflow <- function(user_question) {
     publication = publication_result,
     chat = chat
   )
-  
+
   # Step 3: Get dataset URL
   dataset_url <- get_dataset_url(
     dataset_id = as.character(unlist(dataset_result$dataset_id))
   )
-  
+
   # Return results
   list(
     user_question = user_question,
