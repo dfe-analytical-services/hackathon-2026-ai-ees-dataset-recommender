@@ -155,7 +155,7 @@ server <- function(input, output, session) {
         )
       }
 
-      datasets <- result$recommended_datasets
+      datasets <- result$dataset$datasets
 
       # Publication found but no datasets passed confidence threshold
       if (
@@ -204,8 +204,8 @@ server <- function(input, output, session) {
         )
       }
 
-      dataset_cards <- lapply(seq_along(datasets), function(i) {
-        ds <- datasets[[i]]
+      dataset_cards <- lapply(seq_len(nrow(datasets)), function(i) {
+        ds <- datasets[i, ]
 
         ranking_label <- switch(
           as.character(i),
