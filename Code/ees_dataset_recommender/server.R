@@ -109,47 +109,137 @@ server <- function(input, output, session) {
       
       result <- query_result()
       
+      datasets <- result$dataset$datasets
+      dataset_links <- result$dataset_links
+      
+      if (
+        is.null(datasets) ||
+        nrow(datasets) == 0
+      ) {
+        
+        return(
+          tagList(
+            
+            h2("No suitable dataset found"),
+            
+            tags$p(
+              "A relevant publication was identified, but no dataset met ",
+              "the minimum confidence threshold of 0.8."
+            ),
+            
+            tags$hr(),
+            
+            h2("Selected publication"),
+            
+            tags$p(
+              tags$strong("Title: "),
+              result$publication$publication_title
+            ),
+            
+            tags$p(
+              tags$strong("Confidence: "),
+              round(result$publication$confidence, 2)
+            ),
+            
+            tags$p(
+              tags$strong("Reasoning:")
+            ),
+            
+            tags$p(
+              result$publication$reasoning
+            ),
+            
+            br(),
+            
+            actionButton(
+              inputId = "start_again",
+              label = "Ask another question",
+              class = "govuk-button govuk-button--secondary"
+            )
+          )
+        )
+      }
+      
+      dataset_cards <- lapply(seq_len(nrow(datasets)), function(i) {
+        
+        ds <- datasets[i, ]
+        
+        dataset_link <- dataset_links[[i]]
+        
+        ranking_label <- switch(
+          as.character(i),
+          "1" = "🥇 Top recommendation",
+          "2" = "🥈 Alternative recommendation",
+          "3" = "🥉 Additional recommendation",
+          paste("Recommendation", i)
+        )
+        
+        tagList(
+          
+          tags$div(
+            style = if (i == 1) {
+              paste(
+                "background:#f3f2f1;",
+                "border-left:6px solid #1d70b8;",
+                "padding:15px;",
+                "margin-bottom:20px;"
+              )
+            } else {
+              paste(
+                "background:#ffffff;",
+                "border-left:4px solid #b1b4b6;",
+                "padding:15px;",
+                "margin-bottom:20px;"
+              )
+            },
+            
+            h3(ranking_label),
+            
+            h4(as.character(ds$dataset_title)),
+            
+            tags$p(
+              tags$strong("Link to dataset: "),
+              shiny::a(
+                href = dataset_link,
+                dataset_link,
+                target = "_blank"
+              )
+            ),
+            
+            tags$p(
+              tags$strong("Confidence: "),
+              round(as.numeric(ds$confidence), 2)
+            ),
+            
+            tags$p(
+              tags$strong("Reasoning:")
+            ),
+            
+            tags$p(
+              as.character(ds$reasoning)
+            )
+          )
+        )
+        
+      })
+      
       return(
         tagList(
           
-          h2("Recommended dataset"),
+          h2("Recommended datasets"),
+          
+          tags$p(
+            "Datasets are ranked in order of relevance. ",
+            tags$strong("The first dataset is the recommended dataset"),
+            ", with subsequent datasets provided as alternatives."
+          ),
           
           tags$p(
             tags$strong("Publication name: "),
             result$publication$publication_title
           ),
           
-          tags$p(
-            tags$strong("Dataset name: "),
-            result$dataset$dataset_title
-          ),
-          
-          # tags$p(
-          #   tags$strong("Dataset ID: "),
-          #   result$dataset$dataset_id
-          # ),
-          
-          tags$p(
-            tags$strong("Link to dataset: "),
-            shiny::a(
-              href = result$dataset_link,
-              result$dataset_link,
-              target = "_blank"
-            )
-          ),
-          
-          tags$p(
-            tags$strong("Confidence: "),
-            result$dataset$confidence
-          ),
-          
-          tags$p(
-            tags$strong("Reasoning:")
-          ),
-          
-          tags$p(result$dataset$reasoning),
-          
-          tags$hr(),
+          dataset_cards,
           
           h2("Selected publication"),
           
@@ -158,21 +248,18 @@ server <- function(input, output, session) {
             result$publication$publication_title
           ),
           
-          # tags$p(
-          #   tags$strong("Publication ID: "),
-          #   result$publication$publication_id
-          # ),
-          
           tags$p(
             tags$strong("Confidence: "),
-            result$publication$confidence
+            round(result$publication$confidence, 2)
           ),
           
           tags$p(
             tags$strong("Reasoning:")
           ),
           
-          tags$p(result$publication$reasoning),
+          tags$p(
+            result$publication$reasoning
+          ),
           
           br(),
           
