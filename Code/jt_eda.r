@@ -118,39 +118,45 @@ publication_type <- ellmer::type_object(
 # User question
 user_question <- "Motorways in Europe"
 
+# Full prompt
+publication_prompt <- paste0(
+  "Task: Identify the single publication that is most relevant ",
+  "to the user's data request.\n\n",
+
+  "User request:\n",
+  user_question,
+  "\n\n",
+
+  "Available publications:\n",
+  ees_publications,
+  "\n\n",
+
+  "Selection guidance:\n",
+  "- Choose a publication only if it is genuinely relevant to ",
+  "the user's request.\n",
+  "- Do not select a publication simply because it is the closest ",
+  "available option.\n",
+  "- Consider the meaning of the request, not just keyword matches.\n",
+  "- Prefer a publication that is likely to contain the data needed ",
+  "to answer the request.\n",
+  "- If no publication is sufficiently relevant, return null for ",
+  "publication_id and publication_title.\n",
+  "- If there is no suitable publication, explain why and provide ",
+  "potentially relevant alternatives.\n",
+  "- Select only IDs that appear in the supplied metadata.\n",
+  "- An incorrect recommendation is worse than returning no match."
+)
+
 # LLM call and output
 publication_step_result <- chat$chat_structured(
-  paste0(
-    "Task: Identify the single publication that is most relevant ",
-    "to the user's data request.\n\n",
-
-    "User request:\n",
-    user_question,
-    "\n\n",
-
-    "Available publications:\n",
-    ees_publications,
-    "\n\n",
-
-    "Selection guidance:\n",
-    "- Choose a publication only if it is genuinely relevant to ",
-    "the user's request.\n",
-    "- Do not select a publication simply because it is the closest ",
-    "available option.\n",
-    "- Consider the meaning of the request, not just keyword matches.\n",
-    "- Prefer a publication that is likely to contain the data needed ",
-    "to answer the request.\n",
-    "- If no publication is sufficiently relevant, return null for ",
-    "publication_id and publication_title.\n",
-    "- If there is no suitable publication, explain why and provide ",
-    "potentially relevant alternatives.\n",
-    "- Select only IDs that appear in the supplied metadata.\n",
-    "- An incorrect recommendation is worse than returning no match."
-  ),
+  publication_prompt,
   type = publication_type
 )
 
 # Output
+# Token size
+estimate_tokens(publication_prompt)
+
 # Publication ID
 publication_step_result$publication_id
 
