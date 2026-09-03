@@ -69,8 +69,10 @@ run_ees_workflow <- function(user_question) {
   )
 
   # Step 3: Get dataset URL
-  dataset_url <- get_dataset_url(
-    dataset_id = as.character(unlist(dataset_result$dataset_id))
+  dataset_urls <- vapply(
+    dataset_result$datasets$dataset_id,
+    get_dataset_url,
+    character(1)
   )
 
   # Return results
@@ -78,6 +80,6 @@ run_ees_workflow <- function(user_question) {
     user_question = user_question,
     publication = publication_result,
     dataset = dataset_result,
-    dataset_link = dataset_url
+    dataset_links = dataset_urls
   )
 }
