@@ -20,9 +20,8 @@ source(here::here("Code", "R", "fns_full_pipeline.r"))
 # ------------------------------------------------------------------
 
 recommend_dataset <- function(user_question) {
-  
   Sys.sleep(3) # simulate LLM/API processing
-  
+
   list(
     link = "https://explore-education-statistics.service.gov.uk/",
     message = paste(

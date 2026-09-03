@@ -482,6 +482,38 @@
       "Maintainer": "Gábor Csárdi <csardi.gabor@gmail.com>",
       "Repository": "CRAN"
     },
+    "cellranger": {
+      "Package": "cellranger",
+      "Version": "1.1.0",
+      "Source": "Repository",
+      "Title": "Translate Spreadsheet Cell Ranges to Rows and Columns",
+      "Authors@R": "c( person(\"Jennifer\", \"Bryan\", , \"jenny@stat.ubc.ca\", c(\"cre\", \"aut\")), person(\"Hadley\", \"Wickham\", , \"hadley@rstudio.com\", \"ctb\") )",
+      "Description": "Helper functions to work with spreadsheets and the \"A1:D10\" style of cell range specification.",
+      "Depends": [
+        "R (>= 3.0.0)"
+      ],
+      "License": "MIT + file LICENSE",
+      "LazyData": "true",
+      "URL": "https://github.com/rsheets/cellranger",
+      "BugReports": "https://github.com/rsheets/cellranger/issues",
+      "Suggests": [
+        "covr",
+        "testthat (>= 1.0.0)",
+        "knitr",
+        "rmarkdown"
+      ],
+      "RoxygenNote": "5.0.1.9000",
+      "VignetteBuilder": "knitr",
+      "Imports": [
+        "rematch",
+        "tibble"
+      ],
+      "NeedsCompilation": "no",
+      "Author": "Jennifer Bryan [cre, aut], Hadley Wickham [ctb]",
+      "Maintainer": "Jennifer Bryan <jenny@stat.ubc.ca>",
+      "Repository": "https://packagemanager.posit.co/cran/latest",
+      "Encoding": "UTF-8"
+    },
     "cli": {
       "Package": "cli",
       "Version": "3.6.6",
@@ -1562,6 +1594,44 @@
       "Maintainer": "Jennifer Bryan <jenny@posit.co>",
       "Repository": "https://packagemanager.posit.co/cran/latest"
     },
+    "here": {
+      "Package": "here",
+      "Version": "1.0.2",
+      "Source": "Repository",
+      "Title": "A Simpler Way to Find Your Files",
+      "Date": "2025-09-06",
+      "Authors@R": "c(person(given = \"Kirill\", family = \"M\\u00fcller\", role = c(\"aut\", \"cre\"), email = \"kirill@cynkra.com\", comment = c(ORCID = \"0000-0002-1416-3412\")), person(given = \"Jennifer\", family = \"Bryan\", role = \"ctb\", email = \"jenny@rstudio.com\", comment = c(ORCID = \"0000-0002-6983-2759\")))",
+      "Description": "Constructs paths to your project's files. Declare the relative path of a file within your project with 'i_am()'. Use the 'here()' function as a drop-in replacement for 'file.path()', it will always locate the files relative to your project root.",
+      "License": "MIT + file LICENSE",
+      "URL": "https://here.r-lib.org/, https://github.com/r-lib/here",
+      "BugReports": "https://github.com/r-lib/here/issues",
+      "Imports": [
+        "rprojroot (>= 2.1.0)"
+      ],
+      "Suggests": [
+        "conflicted",
+        "covr",
+        "fs",
+        "knitr",
+        "palmerpenguins",
+        "plyr",
+        "readr",
+        "rlang",
+        "rmarkdown",
+        "testthat",
+        "uuid",
+        "withr"
+      ],
+      "VignetteBuilder": "knitr",
+      "Encoding": "UTF-8",
+      "RoxygenNote": "7.3.3.9000",
+      "Config/testthat/edition": "3",
+      "Config/Needs/website": "tidyverse/tidytemplate",
+      "NeedsCompilation": "no",
+      "Author": "Kirill Müller [aut, cre] (ORCID: <https://orcid.org/0000-0002-1416-3412>), Jennifer Bryan [ctb] (ORCID: <https://orcid.org/0000-0002-6983-2759>)",
+      "Maintainer": "Kirill Müller <kirill@cynkra.com>",
+      "Repository": "https://packagemanager.posit.co/cran/latest"
+    },
     "highr": {
       "Package": "highr",
       "Version": "0.12",
@@ -2169,6 +2239,45 @@
       "NeedsCompilation": "no",
       "Author": "Joe Cheng [cre, aut], Posit Software, PBC [cph, fnd] (03wc8by49)",
       "Maintainer": "Joe Cheng <joe@posit.co>",
+      "Repository": "https://packagemanager.posit.co/cran/latest"
+    },
+    "minty": {
+      "Package": "minty",
+      "Version": "0.0.6",
+      "Source": "Repository",
+      "Title": "Minimal Type Guesser",
+      "Authors@R": "c( person(\"Chung-hong\", \"Chan\", role = c(\"aut\", \"cre\"), email = \"chainsawtiney@gmail.com\", comment = c(ORCID = \"0000-0002-6232-7530\")), person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = \"aut\", comment = \"author of the ported code from readr\"), person(\"Jim\", \"Hester\", role = \"aut\", comment = \"author of the ported code from readr\"), person(\"Romain\", \"Francois\", role = \"ctb\", comment = \"author of the ported code from readr\"), person(\"Jennifer\", \"Bryan\", , \"jenny@posit.co\", role = c(\"aut\"), comment = \"author of the ported code from readr\"), person(\"Shelby\", \"Bearrows\", role = \"ctb\", comment = \"author of the ported code from readr\"), person(\"Posit Software, PBC\", role = \"cph\", comment = \"copyright holder of readr\"), person(\"David\", \"Olson\", role = \"aut\", comment = \"author of src/tzfile.h\") )",
+      "Description": "Port the type guesser from 'readr' (so-called 'readr' first edition parsing engine, now superseded by 'vroom').",
+      "License": "MIT + file LICENSE",
+      "URL": "https://gesistsa.github.io/minty/, https://codeberg.org/chainsawriot/minty",
+      "BugReports": "https://codeberg.org/chainsawriot/minty/issues",
+      "Depends": [
+        "R (>= 4.0)"
+      ],
+      "LinkingTo": [
+        "cpp11 (>= 0.5.3)",
+        "tzdb (>= 0.5.0)"
+      ],
+      "Config/testthat/edition": "3",
+      "Config/testthat/parallel": "false",
+      "Encoding": "UTF-8",
+      "Language": "en-US",
+      "RoxygenNote": "7.3.2",
+      "Imports": [
+        "tzdb"
+      ],
+      "Suggests": [
+        "knitr",
+        "stringi",
+        "testthat",
+        "withr",
+        "hms",
+        "readr"
+      ],
+      "Config/Needs/website": "gesistsa/tsatemplate",
+      "NeedsCompilation": "yes",
+      "Author": "Chung-hong Chan [aut, cre] (ORCID: <https://orcid.org/0000-0002-6232-7530>), Hadley Wickham [aut] (author of the ported code from readr), Jim Hester [aut] (author of the ported code from readr), Romain Francois [ctb] (author of the ported code from readr), Jennifer Bryan [aut] (author of the ported code from readr), Shelby Bearrows [ctb] (author of the ported code from readr), Posit Software, PBC [cph] (copyright holder of readr), David Olson [aut] (author of src/tzfile.h)",
+      "Maintainer": "Chung-hong Chan <chainsawtiney@gmail.com>",
       "Repository": "https://packagemanager.posit.co/cran/latest"
     },
     "odbc": {
@@ -3027,6 +3136,128 @@
       "Maintainer": "Hadley Wickham <hadley@posit.co>",
       "Repository": "CRAN"
     },
+    "reactR": {
+      "Package": "reactR",
+      "Version": "0.6.1",
+      "Source": "Repository",
+      "Type": "Package",
+      "Title": "React Helpers",
+      "Date": "2024-09-14",
+      "Authors@R": "c( person( \"Facebook\", \"Inc\" , role = c(\"aut\", \"cph\") , comment = \"React library in lib, https://reactjs.org/; see AUTHORS for full list of contributors\" ), person( \"Michel\",\"Weststrate\", , role = c(\"aut\", \"cph\") , comment = \"mobx library in lib, https://github.com/mobxjs\" ), person( \"Kent\", \"Russell\" , role = c(\"aut\", \"cre\") , comment = \"R interface\" , email = \"kent.russell@timelyportfolio.com\" ), person( \"Alan\", \"Dipert\" , role = c(\"aut\") , comment = \"R interface\" , email = \"alan@rstudio.com\" ), person( \"Greg\", \"Lin\" , role = c(\"aut\") , comment = \"R interface\" , email = \"glin@glin.io\" ) )",
+      "Maintainer": "Kent Russell <kent.russell@timelyportfolio.com>",
+      "Description": "Make it easy to use 'React' in R with 'htmlwidget' scaffolds, helper dependency functions, an embedded 'Babel' 'transpiler', and examples.",
+      "URL": "https://github.com/react-R/reactR",
+      "BugReports": "https://github.com/react-R/reactR/issues",
+      "License": "MIT + file LICENSE",
+      "Encoding": "UTF-8",
+      "Imports": [
+        "htmltools"
+      ],
+      "Suggests": [
+        "htmlwidgets (>= 1.5.3)",
+        "rmarkdown",
+        "shiny",
+        "V8",
+        "knitr",
+        "usethis",
+        "jsonlite"
+      ],
+      "RoxygenNote": "7.3.2",
+      "VignetteBuilder": "knitr",
+      "NeedsCompilation": "no",
+      "Author": "Facebook Inc [aut, cph] (React library in lib, https://reactjs.org/; see AUTHORS for full list of contributors), Michel Weststrate [aut, cph] (mobx library in lib, https://github.com/mobxjs), Kent Russell [aut, cre] (R interface), Alan Dipert [aut] (R interface), Greg Lin [aut] (R interface)",
+      "Repository": "https://packagemanager.posit.co/cran/latest"
+    },
+    "reactable": {
+      "Package": "reactable",
+      "Version": "0.4.5",
+      "Source": "Repository",
+      "Type": "Package",
+      "Title": "Interactive Data Tables for R",
+      "Authors@R": "c( person(\"Greg\", \"Lin\", email = \"glin@glin.io\", role = c(\"aut\", \"cre\")), person(\"Tanner\", \"Linsley\", role = c(\"ctb\", \"cph\"), comment = \"React Table library\"), person(family = \"Emotion team and other contributors\", role = c(\"ctb\", \"cph\"), comment = \"Emotion library\"), person(\"Kent\", \"Russell\", role = c(\"ctb\", \"cph\"), comment = \"reactR package\"), person(\"Ramnath\", \"Vaidyanathan\", role = c(\"ctb\", \"cph\"), comment = \"htmlwidgets package\"), person(\"Joe\", \"Cheng\", role = c(\"ctb\", \"cph\"), comment = \"htmlwidgets package\"), person(\"JJ\", \"Allaire\", role = c(\"ctb\", \"cph\"), comment = \"htmlwidgets package\"), person(\"Yihui\", \"Xie\", role = c(\"ctb\", \"cph\"), comment = \"htmlwidgets package\"), person(\"Kenton\", \"Russell\", role = c(\"ctb\", \"cph\"), comment = \"htmlwidgets package\"), person(family = \"Facebook, Inc. and its affiliates\", role = c(\"ctb\", \"cph\"), comment = \"React library\"), person(family = \"FormatJS\", role = c(\"ctb\", \"cph\"), comment = \"FormatJS libraries\"), person(family = \"Feross Aboukhadijeh, and other contributors\", role = c(\"ctb\", \"cph\"), comment = \"buffer library\"), person(\"Roman\", \"Shtylman\", role = c(\"ctb\", \"cph\"), comment = \"process library\"), person(\"James\", \"Halliday\", role = c(\"ctb\", \"cph\"), comment = \"stream-browserify library\"), person(family = \"Posit Software, PBC\", role = c(\"fnd\", \"cph\")) )",
+      "Description": "Interactive data tables for R, based on the 'React Table' JavaScript library. Provides an HTML widget that can be used in 'R Markdown' or 'Quarto' documents, 'Shiny' applications, or viewed from an R console.",
+      "License": "MIT + file LICENSE",
+      "URL": "https://glin.github.io/reactable/, https://github.com/glin/reactable",
+      "BugReports": "https://github.com/glin/reactable/issues",
+      "Depends": [
+        "R (>= 3.1)"
+      ],
+      "Imports": [
+        "digest",
+        "htmltools (>= 0.5.2)",
+        "htmlwidgets (>= 1.5.3)",
+        "jsonlite",
+        "reactR"
+      ],
+      "Suggests": [
+        "covr",
+        "crosstalk",
+        "dplyr",
+        "fontawesome",
+        "knitr",
+        "leaflet",
+        "MASS",
+        "rmarkdown",
+        "shiny",
+        "sparkline",
+        "testthat",
+        "tippy",
+        "V8"
+      ],
+      "Encoding": "UTF-8",
+      "RoxygenNote": "7.2.1",
+      "Config/testthat/edition": "3",
+      "NeedsCompilation": "no",
+      "Author": "Greg Lin [aut, cre], Tanner Linsley [ctb, cph] (React Table library), Emotion team and other contributors [ctb, cph] (Emotion library), Kent Russell [ctb, cph] (reactR package), Ramnath Vaidyanathan [ctb, cph] (htmlwidgets package), Joe Cheng [ctb, cph] (htmlwidgets package), JJ Allaire [ctb, cph] (htmlwidgets package), Yihui Xie [ctb, cph] (htmlwidgets package), Kenton Russell [ctb, cph] (htmlwidgets package), Facebook, Inc. and its affiliates [ctb, cph] (React library), FormatJS [ctb, cph] (FormatJS libraries), Feross Aboukhadijeh, and other contributors [ctb, cph] (buffer library), Roman Shtylman [ctb, cph] (process library), James Halliday [ctb, cph] (stream-browserify library), Posit Software, PBC [fnd, cph]",
+      "Maintainer": "Greg Lin <glin@glin.io>",
+      "Repository": "https://packagemanager.posit.co/cran/latest"
+    },
+    "readODS": {
+      "Package": "readODS",
+      "Version": "2.3.6",
+      "Source": "Repository",
+      "Type": "Package",
+      "Title": "Read and Write ODS Files",
+      "Authors@R": "c(person(\"Gerrit-Jan\", \"Schutten\", role = c(\"aut\"), email = \"phonixor@gmail.com\"), person(\"Chung-hong\", \"Chan\", role = c(\"aut\", \"cre\"), email = \"chainsawtiney@gmail.com\", comment = c(ORCID = \"0000-0002-6232-7530\")), person(\"Peter\", \"Brohan\", role = c(\"aut\"), email = \"peter.brohan@gmail.com\"), person(\"Detlef\", \"Steuer\", role = c(\"aut\"), email = \"steuer@hsu-hh.de\", comment = c(ORCID = \"0000-0003-2676-5290\")), person(\"Thomas J.\", \"Leeper\", role = c(\"aut\"), email = \"thosjleeper@gmail.com\", comment = c(ORCID = \"0000-0003-4097-6326\")), person(\"John\", \"Foster\", role = c(\"ctb\"), email = \"john.x.foster@nab.com.au\"), person(\"Sergio\", \"Oller\", role = c(\"ctb\")), person(\"Jim\", \"Hester\", role = c(\"ctb\"), email = \"jim.hester@rstudio.com\", comment = c(ORCID = \"0000-0002-2739-7082\")), person(\"Stephen\", \"Watts\", role = c(\"ctb\")), person(\"Arthur\", \"Katossky\", role = c(\"ctb\")), person(\"Stas\", \"Malavin\", role = c(\"ctb\")), person(\"Duncan\", \"Garmonsway\", role = c(\"ctb\")), person(\"Mehrad\", \"Mahmoudian\", role = c(\"ctb\")), person(\"Matt\", \"Kerlogue\", role = c(\"ctb\")), person(\"Michal\", \"Lauer\", role = c(\"ctb\"), email = \"michal.lauer.25@gmail.com\"), person(\"Till\", \"Straube\", role = c(\"ctb\"), email = \"straube@geo.uni-frankfurt.de\"), person(\"Mauricio\", \"Vargas Sepulveda\", role = c(\"ctb\"), email = \"m.vargas.sepulveda@gmail.com\"), person(\"Marcin\", \"Kalicinski\", role = c(\"ctb\", \"cph\"), comment = \"Author of included RapidXML code\"))",
+      "Description": "Read ODS (OpenDocument Spreadsheet) into R as data frame. Also support writing data frame into ODS file.",
+      "URL": "https://docs.ropensci.org/readODS/, https://github.com/ropensci/readODS",
+      "BugReports": "https://github.com/ropensci/readODS/issues",
+      "Imports": [
+        "cellranger",
+        "minty (>= 0.0.5)",
+        "stringi",
+        "tibble",
+        "vctrs (>= 0.4.2)",
+        "zip",
+        "tools",
+        "withr"
+      ],
+      "LinkingTo": [
+        "cpp11 (>= 0.5.0)"
+      ],
+      "Suggests": [
+        "spelling",
+        "testthat",
+        "datasets",
+        "covr",
+        "knitr",
+        "rmarkdown",
+        "readr (>= 1.2.1)",
+        "desc"
+      ],
+      "License": "GPL-3",
+      "RoxygenNote": "7.3.2",
+      "Encoding": "UTF-8",
+      "VignetteBuilder": "knitr",
+      "Depends": [
+        "R (>= 4.1)"
+      ],
+      "Language": "en-GB",
+      "NeedsCompilation": "yes",
+      "Author": "Gerrit-Jan Schutten [aut], Chung-hong Chan [aut, cre] (ORCID: <https://orcid.org/0000-0002-6232-7530>), Peter Brohan [aut], Detlef Steuer [aut] (ORCID: <https://orcid.org/0000-0003-2676-5290>), Thomas J. Leeper [aut] (ORCID: <https://orcid.org/0000-0003-4097-6326>), John Foster [ctb], Sergio Oller [ctb], Jim Hester [ctb] (ORCID: <https://orcid.org/0000-0002-2739-7082>), Stephen Watts [ctb], Arthur Katossky [ctb], Stas Malavin [ctb], Duncan Garmonsway [ctb], Mehrad Mahmoudian [ctb], Matt Kerlogue [ctb], Michal Lauer [ctb], Till Straube [ctb], Mauricio Vargas Sepulveda [ctb], Marcin Kalicinski [ctb, cph] (Author of included RapidXML code)",
+      "Maintainer": "Chung-hong Chan <chainsawtiney@gmail.com>",
+      "Repository": "CRAN"
+    },
     "readr": {
       "Package": "readr",
       "Version": "2.2.0",
@@ -3083,6 +3314,26 @@
       "NeedsCompilation": "yes",
       "Author": "Hadley Wickham [aut], Jim Hester [aut], Romain Francois [ctb], Jennifer Bryan [aut, cre] (ORCID: <https://orcid.org/0000-0002-6983-2759>), Shelby Bearrows [ctb], Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>), https://github.com/mandreyel/ [cph] (mio library), Jukka Jylänki [ctb, cph] (grisu3 implementation), Mikkel Jørgensen [ctb, cph] (grisu3 implementation)",
       "Maintainer": "Jennifer Bryan <jenny@posit.co>",
+      "Repository": "https://packagemanager.posit.co/cran/latest"
+    },
+    "rematch": {
+      "Package": "rematch",
+      "Version": "2.0.0",
+      "Source": "Repository",
+      "Title": "Match Regular Expressions with a Nicer 'API'",
+      "Author": "Gabor Csardi",
+      "Maintainer": "Gabor Csardi <csardi.gabor@gmail.com>",
+      "Description": "A small wrapper on 'regexpr' to extract the matches and captured groups from the match of a regular expression to a character vector.",
+      "License": "MIT + file LICENSE",
+      "URL": "https://github.com/gaborcsardi/rematch",
+      "BugReports": "https://github.com/gaborcsardi/rematch/issues",
+      "RoxygenNote": "5.0.1.9000",
+      "Suggests": [
+        "covr",
+        "testthat"
+      ],
+      "Encoding": "UTF-8",
+      "NeedsCompilation": "no",
       "Repository": "https://packagemanager.posit.co/cran/latest"
     },
     "renv": {
@@ -3539,6 +3790,50 @@
       "Maintainer": "Carson Sievert <carson@posit.co>",
       "Repository": "https://packagemanager.posit.co/cran/latest"
     },
+    "shinyGovstyle": {
+      "Package": "shinyGovstyle",
+      "Version": "0.2.0",
+      "Source": "Repository",
+      "Title": "Custom Gov Style Inputs for Shiny",
+      "Authors@R": "c( person(\"Ross\", \"Wyatt\", , \"ross.wyatt@justice.gov.uk\", role = \"aut\"), person(\"Cam\", \"Race\", , \"camrace8@gmail.com\", role = c(\"aut\", \"cre\")), person(\"Sarah\", \"Wong\", role = \"aut\"), person(\"Richard\", \"Bielby\", , \"richard.bielby@education.gov.uk\", role = \"ctb\"), person(\"Charlotte\", \"Foster\", , \"charlotte.foster@education.gov.uk\", role = \"ctb\"), person(\"Jeni\", \"Martin\", role = \"ctb\"), person(\"Andrew\", \"Baker\", , \"andrew.baker1@dhsc.gov.uk\", role = \"ctb\") )",
+      "Description": "Collection of 'shiny' application styling that are based on the GOV.UK Design System. See <https://design-system.service.gov.uk/components/> for details.",
+      "License": "GPL (>= 3)",
+      "URL": "https://github.com/dfe-analytical-services/shinyGovstyle",
+      "BugReports": "https://github.com/dfe-analytical-services/shinyGovstyle/issues",
+      "Depends": [
+        "R (>= 4.1.0)"
+      ],
+      "Imports": [
+        "htmltools",
+        "jsonlite",
+        "lifecycle",
+        "purrr",
+        "reactable",
+        "readODS",
+        "readr",
+        "shiny (>= 0.14)",
+        "shinyjs",
+        "stringr",
+        "writexl"
+      ],
+      "Suggests": [
+        "bslib",
+        "knitr",
+        "rlang",
+        "rmarkdown",
+        "shinytest2",
+        "testthat"
+      ],
+      "VignetteBuilder": "knitr",
+      "Config/testthat/edition": "3",
+      "Encoding": "UTF-8",
+      "LazyData": "true",
+      "RoxygenNote": "7.3.3",
+      "NeedsCompilation": "no",
+      "Author": "Ross Wyatt [aut], Cam Race [aut, cre], Sarah Wong [aut], Richard Bielby [ctb], Charlotte Foster [ctb], Jeni Martin [ctb], Andrew Baker [ctb]",
+      "Maintainer": "Cam Race <camrace8@gmail.com>",
+      "Repository": "CRAN"
+    },
     "shinychat": {
       "Package": "shinychat",
       "Version": "0.4.0",
@@ -3580,6 +3875,72 @@
       "Author": "Joe Cheng [aut], Carson Sievert [aut], Garrick Aden-Buie [aut, cre] (ORCID: <https://orcid.org/0000-0002-7111-0077>), Barret Schloerke [aut] (ORCID: <https://orcid.org/0000-0001-9986-114X>), Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
       "Maintainer": "Garrick Aden-Buie <garrick@adenbuie.com>",
       "Repository": "CRAN"
+    },
+    "shinycssloaders": {
+      "Package": "shinycssloaders",
+      "Version": "1.1.0",
+      "Source": "Repository",
+      "Title": "Add Loading Animations to a 'shiny' Output While It's Recalculating",
+      "Authors@R": "c( person(\"Dean\",\"Attali\",email=\"daattali@gmail.com\",role=c(\"aut\",\"cre\"), comment = c(\"Maintainer/developer of shinycssloaders since 2019\", ORCID=\"0000-0002-5645-3493\")), person(\"Andras\",\"Sali\",email=\"andras.sali@alphacruncher.hu\",role=c(\"aut\"),comment=\"Original creator of shinycssloaders package\"), person(\"Luke\",\"Hass\",role=c(\"ctb\",\"cph\"),comment=\"Author of included CSS loader code\") )",
+      "Description": "When a 'Shiny' output (such as a plot, table, map, etc.) is recalculating, it remains  visible but gets greyed out. Using 'shinycssloaders', you can add a loading animation (\"spinner\") to outputs instead. By wrapping a 'Shiny' output in 'withSpinner()', a spinner will automatically appear while the output is recalculating. You can also manually show and hide the spinner, or add a full-page spinner to cover the entire page. See the demo online at <https://daattali.com/shiny/shinycssloaders-demo/>.",
+      "License": "MIT + file LICENSE",
+      "URL": "https://github.com/daattali/shinycssloaders, https://daattali.com/shiny/shinycssloaders-demo/",
+      "BugReports": "https://github.com/daattali/shinycssloaders/issues",
+      "Depends": [
+        "R (>= 3.1)"
+      ],
+      "Imports": [
+        "digest",
+        "glue",
+        "grDevices",
+        "htmltools (>= 0.3.5)",
+        "shiny"
+      ],
+      "Suggests": [
+        "knitr",
+        "shinydisconnect",
+        "shinyjs"
+      ],
+      "RoxygenNote": "7.2.3",
+      "Encoding": "UTF-8",
+      "NeedsCompilation": "no",
+      "Author": "Dean Attali [aut, cre] (Maintainer/developer of shinycssloaders since 2019, <https://orcid.org/0000-0002-5645-3493>), Andras Sali [aut] (Original creator of shinycssloaders package), Luke Hass [ctb, cph] (Author of included CSS loader code)",
+      "Maintainer": "Dean Attali <daattali@gmail.com>",
+      "Repository": "https://packagemanager.posit.co/cran/latest"
+    },
+    "shinyjs": {
+      "Package": "shinyjs",
+      "Version": "2.1.1",
+      "Source": "Repository",
+      "Title": "Easily Improve the User Experience of Your Shiny Apps in Seconds",
+      "Authors@R": "person(\"Dean\", \"Attali\",  email = \"daattali@gmail.com\", role = c(\"aut\", \"cre\"), comment= c(ORCID=\"0000-0002-5645-3493\"))",
+      "Description": "Perform common useful JavaScript operations in Shiny apps that will greatly improve your apps without having to know any JavaScript. Examples include: hiding an element, disabling an input, resetting an input back to its original value, delaying code execution by a few seconds, and many more useful functions for both the end user and the developer. 'shinyjs' can also be used to easily call your own custom JavaScript functions from R.",
+      "URL": "https://deanattali.com/shinyjs/",
+      "BugReports": "https://github.com/daattali/shinyjs/issues",
+      "Depends": [
+        "R (>= 3.1.0)"
+      ],
+      "Imports": [
+        "digest (>= 0.6.8)",
+        "jsonlite",
+        "shiny (>= 1.0.0)"
+      ],
+      "Suggests": [
+        "htmltools (>= 0.2.9)",
+        "knitr (>= 1.7)",
+        "rmarkdown",
+        "shinyAce",
+        "shinydisconnect",
+        "testthat (>= 0.9.1)"
+      ],
+      "License": "MIT + file LICENSE",
+      "VignetteBuilder": "knitr",
+      "RoxygenNote": "7.3.3",
+      "Encoding": "UTF-8",
+      "NeedsCompilation": "no",
+      "Author": "Dean Attali [aut, cre] (ORCID: <https://orcid.org/0000-0002-5645-3493>)",
+      "Maintainer": "Dean Attali <daattali@gmail.com>",
+      "Repository": "https://packagemanager.posit.co/cran/latest"
     },
     "sourcetools": {
       "Package": "sourcetools",
@@ -4419,6 +4780,41 @@
       "Author": "Jim Hester [aut], Lionel Henry [aut, cre], Kirill Müller [aut], Kevin Ushey [aut], Hadley Wickham [aut], Winston Chang [aut], Jennifer Bryan [ctb], Richard Cotton [ctb], Posit Software, PBC [cph, fnd]",
       "Maintainer": "Lionel Henry <lionel@posit.co>",
       "Repository": "https://packagemanager.posit.co/cran/latest"
+    },
+    "writexl": {
+      "Package": "writexl",
+      "Version": "2.0.1",
+      "Source": "Repository",
+      "Type": "Package",
+      "Title": "Export Data Frames to Excel 'xlsx' Format",
+      "Authors@R": "c( person(\"Jeroen\", \"Ooms\", role = \"aut\", comment = c(ORCID = \"0000-0002-4035-0289\")), person(\"Bill\", \"Denney\", ,\"wdenney@humanpredictions.com\", role = c(\"aut\", \"cre\"), comment = c(ORCID=\"0000-0002-5759-428X\")), person(\"John McNamara\", role = \"cph\", comment = \"Author of libxlsxwriter (see AUTHORS and COPYRIGHT files for details)\"))",
+      "Description": "Zero-dependency data frame to xlsx exporter based on 'libxlsxwriter' <https://libxlsxwriter.github.io>. Fast and no Java or Excel required.",
+      "License": "BSD_2_clause + file LICENSE",
+      "Copyright": "Jeroen Ooms. For copyright notices of bundled third-party code (libxlsxwriter and dependencies), see COPYRIGHT.",
+      "Encoding": "UTF-8",
+      "URL": "https://ropensci.r-universe.dev/writexl https://docs.ropensci.org/writexl/",
+      "BugReports": "https://github.com/ropensci/writexl/issues",
+      "Suggests": [
+        "grDevices",
+        "graphics",
+        "spelling",
+        "readxl",
+        "nycflights13",
+        "testthat (>= 3.2.0)",
+        "xml2",
+        "bit64",
+        "knitr",
+        "rmarkdown"
+      ],
+      "VignetteBuilder": "knitr",
+      "Language": "en-US",
+      "SystemRequirements": "zlib",
+      "Config/testthat/edition": "3",
+      "Config/roxygen2/version": "8.1.0",
+      "NeedsCompilation": "yes",
+      "Author": "Jeroen Ooms [aut] (ORCID: <https://orcid.org/0000-0002-4035-0289>), Bill Denney [aut, cre] (ORCID: <https://orcid.org/0000-0002-5759-428X>), John McNamara [cph] (Author of libxlsxwriter (see AUTHORS and COPYRIGHT files for details))",
+      "Maintainer": "Bill Denney <wdenney@humanpredictions.com>",
+      "Repository": "CRAN"
     },
     "xfun": {
       "Package": "xfun",
