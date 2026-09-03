@@ -114,11 +114,28 @@ server <- function(input, output, session) {
           
           h2("Recommended dataset"),
           
-          h3(result$dataset$dataset_title),
+          tags$p(
+            tags$strong("Publication name: "),
+            result$publication$publication_title
+          ),
           
           tags$p(
-            tags$strong("Dataset ID: "),
-            result$dataset$dataset_id
+            tags$strong("Dataset name: "),
+            result$dataset$dataset_title
+          ),
+          
+          # tags$p(
+          #   tags$strong("Dataset ID: "),
+          #   result$dataset$dataset_id
+          # ),
+          
+          tags$p(
+            tags$strong("Link to dataset: "),
+            shiny::a(
+              href = result$dataset_link,
+              result$dataset_link,
+              target = "_blank"
+            )
           ),
           
           tags$p(
@@ -141,10 +158,10 @@ server <- function(input, output, session) {
             result$publication$publication_title
           ),
           
-          tags$p(
-            tags$strong("Publication ID: "),
-            result$publication$publication_id
-          ),
+          # tags$p(
+          #   tags$strong("Publication ID: "),
+          #   result$publication$publication_id
+          # ),
           
           tags$p(
             tags$strong("Confidence: "),

@@ -7,6 +7,7 @@ library(dplyr)
 library(eesyapi)
 library(jsonlite)
 library(devtools)
+library(shinycssloaders)
 
 # Source the LLM function function
 source(here::here("Code", "R", "fns_ees.r"))

@@ -31,15 +31,29 @@ ui <- function(input, output, session) {
         placeholder = "Example: What data do you have on NEET young people?"
       ),
       
-      actionButton(
-        "submit_question",
-        "Find dataset",
-        class = "govuk-button"
+      tagList(
+        tags$script(HTML("
+        $(document).on('keydown', function(e) {
+        if (e.ctrlKey && e.key === 'Enter') {
+        $('#submit_question').click();
+        }
+        });
+        ")),
+        
+        actionButton(
+          "submit_question",
+          "Find dataset",
+          class = "govuk-button"
+        )
       ),
       
       tags$hr(),
       
-      uiOutput("results_ui")
+      shinycssloaders::withSpinner(
+        uiOutput("results_ui"),
+        type = 4,
+        color = "#1d70b8"
+      )
       
     ),
     
