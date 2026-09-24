@@ -74,12 +74,13 @@ run_ees_workflow <- function(user_question) {
     get_dataset_url,
     character(1)
   )
+  
+  dataset_result$datasets$dataset_links <- dataset_urls
 
   # Return results
   list(
     user_question = user_question,
     publication = publication_result,
-    dataset = dataset_result,
-    dataset_links = dataset_urls
+    dataset = dataset_result
   )
 }

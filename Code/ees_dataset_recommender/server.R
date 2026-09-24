@@ -240,8 +240,8 @@ server <- function(input, output, session) {
             tags$p(
               tags$strong("Link to dataset: "),
               shiny::a(
-                href = ds$dataset_url,
-                ds$dataset_url,
+                href = ds$dataset_links,
+                ds$dataset_links,
                 target = "_blank"
               )
             ),
