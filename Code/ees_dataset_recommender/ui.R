@@ -3,7 +3,7 @@ ui <- function(input, output, session) {
     shinyjs::useShinyjs(),
 
     shinyGovstyle::header(
-      org_name = "Department for Education",
+      org_name = "DfE",
       service_name = "EES Dataset Recommender"
     ),
 
